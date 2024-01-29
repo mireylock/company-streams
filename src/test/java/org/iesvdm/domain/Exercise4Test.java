@@ -4,6 +4,7 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.function.Predicate;
 
@@ -18,7 +19,7 @@ public class Exercise4Test extends CompanyDomainForKata
     @Tag("KATA")
     public void findSupplierNames()
     {
-        List<String> supplierNames = null;
+        List<String> supplierNames = Arrays.stream(this.company.getSuppliers()).map(supplier -> supplier.getName()).toList();
 
         var expectedSupplierNames = List.of(
                 "Shedtastic",
@@ -40,9 +41,9 @@ public class Exercise4Test extends CompanyDomainForKata
     public void countSuppliersWithMoreThanTwoItems()
     {
         Predicate<Supplier> moreThanTwoItems = null;
-        int suppliersWithMoreThanTwoItems = 0;
+        int suppliersWithMoreThanTwoItems = (int) Arrays.stream(this.company.getSuppliers()).filter(supplier -> Arrays.stream(supplier.getItemNames()).count() >2).count();
 
-        Assertions.assertEquals(5, suppliersWithMoreThanTwoItems, "suppliers with more than 2 items");
+        Assertions.assertEquals(5, suppliersWithMoreThanTwoItems);
     }
 
     /**

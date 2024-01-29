@@ -6,6 +6,7 @@ import org.junit.jupiter.api.Test;
 
 import java.util.List;
 import java.util.function.Predicate;
+import java.util.stream.Collectors;
 
 /**
  */
@@ -18,8 +19,7 @@ public class Exercise2Test extends CompanyDomainForKata
     @Tag("KATA")
     public void customerFromLondonPredicate()
     {
-        Predicate<Customer> predicate = null;
-
+        Predicate<Customer> predicate = customer -> customer.getCity().equalsIgnoreCase("london");
 
         Customer customerFromLondon = new Customer("test customer", "London");
 
@@ -32,7 +32,9 @@ public class Exercise2Test extends CompanyDomainForKata
     @Tag("KATA")
     public void doAnyCustomersLiveInLondon()
     {
-        boolean anyCustomersFromLondon = false;
+        boolean anyCustomersFromLondon = this.company.getCustomers()
+                .stream()
+                .anyMatch(customer -> customer.getCity().equalsIgnoreCase("london"));
 
         Assertions.assertTrue(anyCustomersFromLondon);
     }
@@ -41,7 +43,8 @@ public class Exercise2Test extends CompanyDomainForKata
     @Tag("KATA")
     public void doAllCustomersLiveInLondon()
     {
-        boolean allCustomersFromLondon = true;
+        boolean allCustomersFromLondon = this.company.getCustomers().stream()
+                .allMatch(customer -> customer.getCity().equalsIgnoreCase("london"));;
 
         Assertions.assertFalse(allCustomersFromLondon);
     }
@@ -50,7 +53,9 @@ public class Exercise2Test extends CompanyDomainForKata
     @Tag("KATA")
     public void howManyCustomersLiveInLondon()
     {
-        int numberOfCustomerFromLondon = 0;
+        int numberOfCustomerFromLondon = (int) this.company.getCustomers().stream()
+                        .filter(customer -> customer.getCity().equalsIgnoreCase("london"))
+                        .count();
 
         Assertions.assertEquals(2, numberOfCustomerFromLondon, "Should be 2 London customers");
     }
@@ -70,10 +75,12 @@ public class Exercise2Test extends CompanyDomainForKata
     @Tag("KATA")
     public void getCustomersWhoDontLiveInLondon()
     {
-        List<Customer> customersNotFromLondon = null;
+        List<Customer> customersNotFromLondon = this.company.getCustomers().stream()
+                .filter(customer -> !customer.getCity().equalsIgnoreCase("london"))
+                .toList();
 
         var expectedNames = List.of("Mary");
-        Assertions.assertEquals(expectedNames, List.of("EMPTY"));
+        Assertions.assertEquals(expectedNames, List.of(customersNotFromLondon.get(0).getName()));
     }
 
     /**
@@ -83,9 +90,10 @@ public class Exercise2Test extends CompanyDomainForKata
     @Tag("KATA")
     public void getCustomersWhoDoAndDoNotLiveInLondon()
     {
-        List<Customer> customers = null;
+        List<Customer> customers = this.company.getCustomers();
 
         Assertions.assertEquals(List.of("Fred", "Bill"), List.of("VOID"));
+
         Assertions.assertEquals(List.of("Mary"), List.of("VOID"));
     }
 

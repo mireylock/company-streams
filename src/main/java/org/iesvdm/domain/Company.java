@@ -88,7 +88,16 @@ public class Company
      */
     public Customer getCustomerNamed(String name)
     {
-        Assertions.fail("Implement this method as part of Exercise 2");
-        return null;
+        var res = customers.stream()
+                .filter(customer -> customer.getName().equalsIgnoreCase(name))
+                .limit(1)
+                .toList();
+
+        if (res.isEmpty()){
+            return null;
+        } else {
+            return res.get(0);
+        }
+
     }
 }
